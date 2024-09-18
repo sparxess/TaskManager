@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManager.Domain.Models.Enums;
+﻿using TaskManager.Domain.Models.Enums;
 
 namespace TaskManager.API.Models
 {
@@ -12,9 +7,9 @@ namespace TaskManager.API.Models
         /// <summary>
         /// Наименование задачи
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
         /// <summary>
-        /// Id задачи
+        /// Дата создания
         /// </summary>
         public DateTimeOffset Date { get; set; }
         /// <summary>

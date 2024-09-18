@@ -4,7 +4,6 @@ using TaskManager.API.Models;
 using TaskManager.Domain.Models;
 using TaskManager.Domain.Models.Enums;
 using TaskManager.Domain.Services;
-using TaskManager.Storage.Entities;
 
 namespace TaskManager.API.Controllers
 {
@@ -36,7 +35,6 @@ namespace TaskManager.API.Controllers
             };
 
             var result = await _taskService.CreateTaskAsync(model);
-
             return Created(string.Empty, result);
         }
 
@@ -52,11 +50,8 @@ namespace TaskManager.API.Controllers
         public async Task<ActionResult> GetTaskById(Guid id)
         {
             var task = await _taskService.GetTaskByIdAsync(id);
-
             if (task == null)
-            {
                 return NotFound();
-            }
 
             return Ok(task);
         }
@@ -79,7 +74,6 @@ namespace TaskManager.API.Controllers
             };
 
             await _taskService.UpdateTaskAsync(model);
-
             return Ok();
         }
 
@@ -92,7 +86,6 @@ namespace TaskManager.API.Controllers
         public async Task<ActionResult> DeleteTask(Guid id)
         {
             await _taskService.DeleteTaskAsync(id);
-
             return NoContent();
         }
     }

@@ -1,10 +1,4 @@
-﻿using Azure.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManager.Domain.Models;
+﻿using TaskManager.Domain.Models;
 using TaskManager.Storage.Entities;
 using TaskManager.Storage.Entities.Enums;
 using TaskManager.Storage.Repositories;
@@ -14,7 +8,6 @@ namespace TaskManager.Domain.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-
         private readonly IFileRepository _fileRepository;
 
         public TaskService(ITaskRepository taskRepository, IFileRepository fileRepository)
@@ -31,17 +24,15 @@ namespace TaskManager.Domain.Services
                 Description = request.Description,
                 Status = (TaskItemStatus)(int)request.Status
             };
-
             return await _taskRepository.CreateTaskAsync(model);
         }
 
         public async Task<TaskItemModel> GetTaskByIdAsync(Guid id)
         {
             var taskModel = await _taskRepository.GetTaskByIdAsync(id);
-
-            return new TaskItemModel
+            return new()
             {
-                TaskId = taskModel.TaskId,
+                TaskId = taskModel!.TaskId,
                 Date = taskModel.Date,
                 Description = taskModel.Description,
                 Status = (Models.Enums.TaskItemStatus)(int)taskModel.Status
@@ -51,14 +42,13 @@ namespace TaskManager.Domain.Services
         public async Task DeleteTaskAsync(Guid id)
         {
             await _fileRepository.DeleteFilesByTaskId(id);
-
             await _taskRepository.DeleteTaskAsync(id);
         }
 
         public async Task UpdateTaskAsync(TaskItemModel model)
         {
             await _taskRepository.UpdateTaskAsync(
-                new TaskItemEntity
+                new()
                 {
                     TaskId = model.TaskId,
                     Date = model.Date,

@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
-using System.Threading.Tasks;
-using TaskManager.API.Models;
 using TaskManager.Domain.Models;
-using TaskManager.Domain.Models.Enums;
 using TaskManager.Domain.Services;
-using TaskManager.Storage.Entities;
 
 namespace TaskManager.API.Controllers
 {
@@ -28,23 +24,20 @@ namespace TaskManager.API.Controllers
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         public async Task<ActionResult> UploadFile(IFormFile file, [FromQuery] Guid taskId)
         {
-            using (var memoryStream = new MemoryStream())
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+
+            var fileModel = new FileModel
             {
-                await file.CopyToAsync(memoryStream);
-                
-                var fileModel = new FileModel
-                {
-                    FileName = file.FileName,
-                    ContentType = file.ContentType,
-                    DateCreated = DateTimeOffset.Now,
-                    TaskId = taskId,
-                    Content = memoryStream.ToArray()
-                };
+                FileName = file.FileName,
+                ContentType = file.ContentType,
+                DateCreated = DateTimeOffset.Now,
+                TaskId = taskId,
+                Content = memoryStream.ToArray()
+            };
 
-                var result = await _fileService.UploadFileAsync(fileModel);
-
-                return Created(string.Empty, result);
-            }
+            var result = await _fileService.UploadFileAsync(fileModel);
+            return Created(string.Empty, result);
         }
 
         /// <summary>
@@ -59,11 +52,8 @@ namespace TaskManager.API.Controllers
         public async Task<ActionResult> GetFileById(Guid id)
         {
             var file = await _fileService.GetFileByIdAsync(id);
-            
             if (file == null)
-            {
                 return NotFound();
-            }
 
             return File(file.Content, file.ContentType, file.FileName);
         }
@@ -77,23 +67,20 @@ namespace TaskManager.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateFileAsync(IFormFile file, [FromQuery] Guid id)
         {
-            using (var memoryStream = new MemoryStream())
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+
+            var fileModel = new FileModel
             {
-                await file.CopyToAsync(memoryStream);
+                Id = id,
+                FileName = file.FileName,
+                ContentType = file.ContentType,
+                DateCreated = DateTimeOffset.Now,
+                Content = memoryStream.ToArray()
+            };
 
-                var fileModel = new FileModel
-                {
-                    Id = id,
-                    FileName = file.FileName,
-                    ContentType = file.ContentType,
-                    DateCreated = DateTimeOffset.Now,
-                    Content = memoryStream.ToArray()
-                };
-
-                await _fileService.UpdateFileAsync(fileModel);
-
-                return Ok();
-            }
+            await _fileService.UpdateFileAsync(fileModel);
+            return Ok();
         }
 
         /// <summary>
@@ -105,7 +92,6 @@ namespace TaskManager.API.Controllers
         public async Task<ActionResult> DeleteFile(Guid id)
         {
             await _fileService.DeleteFileAsync(id);
-
             return NoContent();
         }
     }

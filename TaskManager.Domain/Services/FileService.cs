@@ -1,10 +1,4 @@
-﻿using Azure.Core;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using TaskManager.Domain.Models;
 using TaskManager.Storage.Entities;
 using TaskManager.Storage.Repositories;
@@ -14,7 +8,6 @@ namespace TaskManager.Domain.Services
     public class FileService : IFileService
     {
         private readonly IFileRepository _fileRepository;
-
         private readonly ITaskRepository _taskRepository;
 
         public FileService(IFileRepository fileRepository, ITaskRepository taskRepository)
@@ -25,12 +18,8 @@ namespace TaskManager.Domain.Services
 
         public async Task<Guid> UploadFileAsync(FileModel request)
         {
-            var taskItem = await _taskRepository.GetTaskByIdAsync(request.TaskId);
-
-            if (taskItem == null)
-            {
+            var taskItem = await _taskRepository.GetTaskByIdAsync(request.TaskId) ?? 
                 throw new DataException("File not found");
-            }
 
             var model = new FileEntity
             {
@@ -40,7 +29,6 @@ namespace TaskManager.Domain.Services
                 Content = request.Content,
                 TaskId = request.TaskId,
             };
-
             return await _fileRepository.UploadFileAsync(model);
         }
 
@@ -52,10 +40,9 @@ namespace TaskManager.Domain.Services
         public async Task<FileModel> GetFileByIdAsync(Guid id)
         {
             var fileModel = await _fileRepository.GetFileByIdAsync(id);
-
-            return new FileModel
+            return new()
             {
-                Id = fileModel.Id,
+                Id = fileModel!.Id,
                 FileName = fileModel.FileName,
                 ContentType = fileModel.ContentType,
                 DateCreated = fileModel.DateCreated,
@@ -67,7 +54,7 @@ namespace TaskManager.Domain.Services
         public async Task UpdateFileAsync(FileModel model)
         {
             await _fileRepository.UpdateFileAsync(
-                new FileEntity
+                new()
                 {
                     Id = model.Id,
                     FileName = model.FileName,

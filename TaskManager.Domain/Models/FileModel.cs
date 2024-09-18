@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManager.Storage.Entities;
+﻿using TaskManager.Storage.Entities;
 
 namespace TaskManager.Domain.Models
 {
@@ -16,11 +11,11 @@ namespace TaskManager.Domain.Models
         /// <summary>
         /// Имя файла
         /// </summary>
-        public string FileName { get; set; }
+        public string FileName { get; set; } = null!;
         /// <summary>
         /// Тип файла
         /// </summary>
-        public string ContentType { get; set; }
+        public string ContentType { get; set; } = null!;
         /// <summary>
         /// Дата создания файла
         /// </summary>
@@ -28,11 +23,11 @@ namespace TaskManager.Domain.Models
         /// <summary>
         /// Содержимое файла в виде массива байтов
         /// </summary>
-        public byte[] Content { get; set; }
+        public byte[] Content { get; set; } = null!;
         /// <summary>
         /// Задача, к которой относится файл
         /// </summary>
-        public TaskItemEntity TaskItemEntity { get; set; }
+        public TaskItemEntity TaskItemEntity { get; set; } = null!;
         /// <summary>
         /// Id задачи, к которой относится файл
         /// </summary>

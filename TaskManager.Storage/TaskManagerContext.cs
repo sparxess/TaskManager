@@ -1,11 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManager.Storage.Entities;
 using TaskManager.Storage.Entities.Enums;
 
@@ -33,6 +26,7 @@ namespace TaskManager.Storage
             var firstTaskItemId = Guid.NewGuid();
             var secondTaskItemId = Guid.NewGuid();
             var thirdTaskItemId = Guid.NewGuid();
+
             modelBuilder.Entity<TaskItemEntity>().HasData(
                 new TaskItemEntity
                 {

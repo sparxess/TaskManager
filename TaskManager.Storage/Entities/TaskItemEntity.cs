@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManager.Storage.Entities.Enums;
+﻿using TaskManager.Storage.Entities.Enums;
 
 namespace TaskManager.Storage.Entities
 {
@@ -16,7 +11,7 @@ namespace TaskManager.Storage.Entities
         /// <summary>
         /// Наименование задачи
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
         /// <summary>
         /// Дата создания задачи
         /// </summary>
@@ -28,7 +23,6 @@ namespace TaskManager.Storage.Entities
         /// <summary>
         /// Список файлов, связанных с задачей
         /// </summary>
-        public IEnumerable<FileEntity> Files { get; set; }
-
+        public IEnumerable<FileEntity> Files { get; set; } = null!;
     }
 }

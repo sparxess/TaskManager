@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManager.Storage.Entities;
 
 namespace TaskManager.Storage.Repositories
@@ -47,6 +42,7 @@ namespace TaskManager.Storage.Repositories
         {
             var file = await _context.Files
                 .FirstOrDefaultAsync(i => i.Id == model.Id);
+
             if (file != null)
             {
                 file.FileName = model.FileName;
